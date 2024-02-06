@@ -6,11 +6,11 @@ import UserCard from './UserCard';
 export default function Nav({ setTopic, setSortBy }) {
     
     return (
-        <nav>
-        <Header />
-        <TopicSelector />
-        <SortBySelector />
-        <UserCard />
-        </nav>
+        <>
+            <Header />
+            <TopicSelector />
+            <SortBySelector />
+            <UserCard />
+        </>
     )
 }

@@ -10,8 +10,12 @@ function App() {
 
   return (
     <>
+    <nav>
       <Nav setTopic={setTopic} setSortBy={setSortBy}/>
+    </nav>
+    <main>
       <Routers />
+    </main>
     </>
   )
 }
