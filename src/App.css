@@ -137,10 +137,20 @@ nav {
   font-size: 3vw;
 }
 
-.comment-list {
+.comment-input-box {
   grid-column-start: 1;
   grid-column-end: 4;
   grid-row: 8;
+  width: 85vw;
+  height: auto;
+  margin: 7vw;
+  font-size: 3vw;
+}
+
+.comment-list {
+  grid-column-start: 1;
+  grid-column-end: 4;
+  grid-row: 9;
 
   display: grid;
   row-gap: 2rem; 

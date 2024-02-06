@@ -1,14 +1,14 @@
-import CommentList from '../components/CommentList';
 import VoteManager from '../components/VoteManager';
+import CommentManager from '../components/CommentManager';
 import { getArticle } from '../api'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
 
 export default function ArticlePage() {
 
     const navigate = useNavigate();
     const { article_id } = useParams();
-    const { article, isLoading, error } = getArticle(article_id)
+    const { article, isLoading, error } = fetchArticle(article_id)
     const [ showComments, setShowComments ] = useState(false);
 
     const handleReturn = () => {
@@ -38,10 +38,35 @@ export default function ArticlePage() {
             {showComments ? "Hide": "Show"} Comments
         </button>
         {showComments ? 
-            <CommentList article_id={article_id}/>
+            <>
+                <CommentManager article_id={article_id}/>
+            </>
         : null}
         </div>
     )
 }
 
+function fetchArticle (article_id) {
+    const [article, setArticle] = useState();
+    const [isLoading, setLoading] = useState(true); 
+    const [error, setError] = useState(); 
 
+    useEffect(() => {
+        const fetchArticle = async () => {
+            try {
+                setLoading(true);
+                const article = await getArticle(article_id)
+                setArticle(article);
+            } catch (err) {
+                setError(err);
+            } finally { 
+                setLoading(false);
+            }
+        };
+
+        fetchArticle();
+
+    }, [article_id]);
+
+    return { article, isLoading, error };
+};

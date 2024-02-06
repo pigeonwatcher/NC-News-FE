@@ -1,106 +1,34 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export function getArticles() {
-    const [articles, setArticles] = useState([]);
-    const [isLoading, setLoading] = useState(true);
-    const [error, setError] = useState();
-
-    useEffect(() => {
-        const getArticles = async () => {
-            try {
-                const { data: {articles} } = await axios.get('https://nc-news-th0a.onrender.com/api/articles');
-                setArticles(articles);
-            } catch(err) {
-                setError(err)
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        getArticles();
-    }, [])
-
-    return { articles, isLoading, error }
+export async function getArticles() {
+    const { data: {articles} } = await axios.get('https://nc-news-th0a.onrender.com/api/articles');
+    return articles;
 }
 
-export function getArticle (article_id) {
-    const [article, setArticle] = useState();
-    const [isLoading, setLoading] = useState(true); 
-    const [error, setError] = useState(); 
-
-    useEffect(() => {
-        const getArticle = async () => {
-            try {
-                setLoading(true);
-                const { data: {article} } = await axios.get(`https://nc-news-th0a.onrender.com/api/articles/${article_id}`);
-                setArticle(article);
-            } catch (err) {
-                setError(err);
-            } finally { 
-                setLoading(false);
-            }
-        };
-
-        getArticle();
-
-    }, [article_id]);
-
-    return { article, isLoading, error };
+export async function getArticle (article_id) {
+    const { data: {article} } = await axios.get(`https://nc-news-th0a.onrender.com/api/articles/${article_id}`);
+    return article;
 };
 
-export function getComments (article_id) {
-    const [comments, setComments] = useState();
-    const [isLoading, setLoading] = useState(true); 
-    const [error, setError] = useState(); 
+export async function getComments(article_id) {
+    const params = {
+        sort_by: "created_at", 
+        order: "desc"
+    }
 
-    useEffect(() => {
-        const getComments = async () => {
-            try {
-                setLoading(true);
-                const { data: { comments } } = await axios.get(`https://nc-news-th0a.onrender.com/api/articles/${article_id}/comments`);
-                setComments(comments);
-            } catch (err) {
-                setError(err);
-            } finally { 
-                setLoading(false);
-            }
-        };
+    const { data: { comments } } = await axios.get(`https://nc-news-th0a.onrender.com/api/articles/${article_id}/comments`, {params: params});
 
-        getComments();
-
-    }, [article_id]);
-
-    return { comments, isLoading, error };
+    return comments;
 };
 
-export function patchVote(article) {
-    const [votes, setVotes] = useState(article.votes);
-    const [isLoading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+export async function patchVote(article_id, inc) {
+    const { data: { article: { votes } } } = await axios.patch(`https://nc-news-th0a.onrender.com/api/articles/${article_id}`, { inc_votes: inc });
+    return votes;
+}
 
-    const patchVote = async (inc) => {
-        try {
-            setLoading(true);
-            const { data: { article: { votes } } } = await axios.patch(`https://nc-news-th0a.onrender.com/api/articles/${article.article_id}`, { inc_votes: inc });
-            setVotes(votes);
-        } catch (err) {
-            setError(err);
-        } finally {
-            setLoading(false);
-        }
-    };
+export async function postComment(article_id, commentToPost) {
 
-    const handleVote = (inc) => {
-        // Optimistic update
-        setVotes((currentVotes) => currentVotes + inc);
-
-        try {
-            patchVote(inc)
-        } catch {
-            setVotes((currentVotes) => currentVotes - inc);
-        }
-    };
-
-    return { votes, handleVote, isLoading, error };
+    const { data: { comment } } = await axios.post(`https://nc-news-th0a.onrender.com/api/articles/${article_id}/comments`, commentToPost);
+    return comment;
 }
