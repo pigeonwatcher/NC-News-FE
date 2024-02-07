@@ -32,3 +32,9 @@ export async function postComment(article_id, commentToPost) {
     const { data: { comment } } = await axios.post(`https://nc-news-th0a.onrender.com/api/articles/${article_id}/comments`, commentToPost);
     return comment;
 }
+
+export async function deleteComment(comment_id) {
+
+    const { data: { comment } } = await axios.delete(`https://nc-news-th0a.onrender.com/api/comments/${comment_id}`);
+    return comment;
+}
