@@ -1,3 +1,4 @@
+import ErrorHandler from '../components/ErrorHandler';
 import { postComment } from '../api';
 import { useState, useContext } from 'react';
 import { UserContext } from '../contexts/LoggedInUser';
@@ -21,7 +22,7 @@ export default function CommentInputBox({ setComments, article_id }) {
         }
     }
 
-    if (error) return <div className='comment-input-box'>Error: {`${error.code} ${error.message}`}</div>;
+    if (error) return <div className='comment-input-box'><ErrorHandler error={error} /></div>;
 
     return (
         <form className='comment-input-box' onSubmit={handleSubmit}>
