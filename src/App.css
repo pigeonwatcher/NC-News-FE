@@ -3,6 +3,11 @@ nav {
   text-align: center;
 }
 
+select {
+  width: 30vw; 
+  height: auto;
+}
+
 .article-list {
   display: grid;
   row-gap: 2rem; 
@@ -211,4 +216,14 @@ nav {
   height: 7vw;
   padding: 0;
   margin: 0;
+}
+
+#topic-selector {
+  text-align: center;
+  font-size: 2.5vw;
+}
+
+#sort-by-selector {
+  text-align: center;
+  font-size: 2.5vw;
 }

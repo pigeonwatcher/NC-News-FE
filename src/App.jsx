@@ -1,11 +1,8 @@
-import { useState } from 'react'
 import Nav from './components/Nav';
 import Routers from './components/Routers';
 import './App.css'
 
-function App() {
-
-  const [sortBy, setSortBy] = useState(null);
+export default function App() {
 
   return (
     <>
@@ -18,5 +15,3 @@ function App() {
     </>
   )
 }
-
-export default App

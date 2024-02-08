@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export async function getArticles(topic) {
-
-    let url = `https://nc-news-th0a.onrender.com/api/articles`;
-
-    if(topic !== undefined && topic !== null) {
-        url += `?topic=${topic}`;
+export async function getArticles(topic, sort_by, order) {
+    const params = {
+        topic: topic !== "All" ? topic : undefined,
+        sort_by: sort_by,
+        order: order
     }
 
-    const { data: {articles} } = await axios.get(url);
+    const { data: {articles} } = await axios.get(`https://nc-news-th0a.onrender.com/api/articles`, { params: params });
     return articles;
 }
 
