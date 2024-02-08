@@ -1,13 +1,15 @@
 import ArticleList from '../components/ArticleList';
 import { getArticles } from '../api';
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function HomePage() {
 
-    const { articles, isLoading, error } = fetchArticles();
+    const location = useLocation();
+    const { articles, isLoading, error } = loadArticles(location);
 
     if (isLoading) return <div>Loading...</div>;
-    if (error) {console.log(error); return <div>Error: {error.msg}</div>;}
+    if (error) return <div>Error: {`${error.code} ${error.message}`}</div>;
     if (articles.length === 0 || articles === undefined) return <div>No articles found</div>;
 
     return (
@@ -17,15 +19,17 @@ export default function HomePage() {
     )
 }
 
-function fetchArticles() {
+function loadArticles(location) {
     const [articles, setArticles] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState();
 
     useEffect(() => {
-        const fetchArticles = async () => {
+        const loadArticles = async () => {
             try {
-                const articles = await getArticles();
+                const searchParams = new URLSearchParams(location.search);
+                const topic = searchParams.get('topic');
+                const articles = await getArticles(topic);
                 setArticles(articles);
             } catch(err) {
                 setError(err)
@@ -34,8 +38,8 @@ function fetchArticles() {
             }
         }
 
-        fetchArticles();
-    }, [])
+        loadArticles();
+    }, [location])
 
     return { articles, isLoading, error }
 }

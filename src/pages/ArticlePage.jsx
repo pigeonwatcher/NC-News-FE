@@ -20,7 +20,7 @@ export default function ArticlePage() {
     }
 
     if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.msg}</div>;
+    if (error) return <div>Error: {`${error.code} ${error.message}`}</div>;
     if (article === undefined) return <div>Article not found</div>; 
 
     return (
