@@ -1,5 +1,6 @@
 import VoteManager from '../components/VoteManager';
 import CommentManager from '../components/CommentManager';
+import ErrorHandler from '../components/ErrorHandler';
 import { getArticle } from '../api'
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
@@ -12,7 +13,7 @@ export default function ArticlePage() {
     const [ showComments, setShowComments ] = useState(false);
 
     if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {`${error.code} ${error.message}`}</div>;
+    if (error) return <ErrorHandler error={error} />
     if (!article) return <div>Article not found</div>; 
 
     return (

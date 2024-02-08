@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export async function getArticles(topic, sort_by, order) {

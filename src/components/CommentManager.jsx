@@ -1,3 +1,4 @@
+import ErrorHandler from '../components/ErrorHandler';
 import CommentList from './CommentList';
 import CommentInputBox from './CommentInputBox';
 import { getComments, deleteComment } from '../api';
@@ -33,7 +34,7 @@ export default function CommentManager({ article_id }) {
 
     const displayComments = () => {
         if (isLoading) return <div className='comment-list'>Loading...</div>;
-        if (error) return <div className='comment-list'>Error: {error.message}</div>;
+        if (error) return <div className='comment-list'><ErrorHandler error={error} /></div>;
         if (comments.length === 0 || !comments) return <div className='comment-list'>No Comments</div>; 
 
         return <CommentList comments={comments} useRemoveComment={useRemoveComment} />

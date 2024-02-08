@@ -1,5 +1,4 @@
 import Comment from './Comment';
-import { useState, useEffect } from 'react';
 
 export default function CommentList({ comments, useRemoveComment }) {
 

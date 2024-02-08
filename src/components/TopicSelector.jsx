@@ -17,11 +17,11 @@ export default function TopicSelector() {
     }
 
     if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {`${error.code} ${error.message}`}</div>;
+    if (error) return <ErrorHandler error={error} />
 
     return (
         <div id='topic-selector'>
-            <label htmlFor='topics'>Category:</label>
+            <label htmlFor='topics'>Topic:</label>
             <select name='topics' id='topics' value={currentTopic} onChange={onChange}>
                 <option key={'All'}>{'All'}</option>
                 {topics.map((topic)=> {
@@ -44,7 +44,7 @@ function useLoadTopics() {
             try {
                 const loadedTopics = await getTopics();
                 setTopics(loadedTopics.map((topic) => {
-                    topic['display'] = topic.slug.replace(/(^\w|\s\w)/g, m => m.toUpperCase()); // Capitalise first letter for display. Thank you stackexchange. 
+                    topic['display'] = topic.slug.replace(/(^\w|\s\w)/g, m => m.toUpperCase()); 
                     return topic;
                 }));
                 setError(null);

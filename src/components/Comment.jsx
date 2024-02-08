@@ -1,3 +1,4 @@
+import ErrorHandler from '../components/ErrorHandler';
 import { useContext } from 'react';
 import { UserContext } from '../contexts/LoggedInUser';
 
@@ -7,7 +8,7 @@ export default function Comment({ comment, useRemoveComment }) {
     const { removeComment, isLoading, error } = useRemoveComment()
 
     if (isLoading) return <div>Deleting...</div>;
-    if (error) return <div>Error: {`${error.code} ${error.message}`}</div>;
+    if (error) return <ErrorHandler error={error} />
     
     return (
         <li className='comment'>
