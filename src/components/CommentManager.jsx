@@ -1,39 +1,63 @@
 import CommentList from './CommentList';
 import CommentInputBox from './CommentInputBox';
 import { getComments, deleteComment } from '../api';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function CommentManager({ article_id }) {
 
-    const { comments, setComments, isLoading, error } = loadComments(article_id);
-    const handleRemoveComment = createRemoveCommentHandler(setComments);
+    const { comments, setComments, isLoading, error } = useLoadComments(article_id);
 
-    const renderComments = () => {
+    const useRemoveComment = () => {
+        const [isLoading, setLoading] = useState(false); 
+        const [error, setError] = useState(null); 
+
+        const removeComment = async (user, commentToDelete) => {
+            if(user === commentToDelete.author) {
+                setLoading(true);
+                try {
+                    await deleteComment(commentToDelete.comment_id);
+                    setComments((comments) => {
+                        return comments.filter((comment) => comment.comment_id !== commentToDelete.comment_id);
+                    })
+                    setError(null);
+                } catch(err) {
+                    setError(err);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        }
+
+        return { removeComment, isLoading, error }
+    }
+
+    const displayComments = () => {
         if (isLoading) return <div className='comment-list'>Loading...</div>;
         if (error) return <div className='comment-list'>Error: {error.message}</div>;
-        if (comments.length === 0 || comments === undefined) return <div className='comment-list'>No Comments</div>; 
+        if (comments.length === 0 || !comments) return <div className='comment-list'>No Comments</div>; 
 
-        return <CommentList comments={comments} handleRemoveComment={handleRemoveComment} />
+        return <CommentList comments={comments} useRemoveComment={useRemoveComment} />
     }
 
     return (
         <>
             <CommentInputBox setComments={setComments} article_id={article_id}/>
-            {renderComments()}
+            {displayComments()}
         </>
     )
 }
 
-function loadComments (article_id) {
+function useLoadComments (article_id) {
     const [comments, setComments] = useState();
     const [isLoading, setLoading] = useState(true); 
     const [error, setError] = useState(); 
 
-    const fetchComments = async () => {
+    const loadComments = async () => {
+        setLoading(true);
         try {
-            setLoading(true);
-            const commentsList = await getComments(article_id);
-            setComments(commentsList);
+            const loadedComments = await getComments(article_id);
+            setComments(loadedComments);
+            setError(null);
         } catch (err) {
             setError(err);
         } finally { 
@@ -42,7 +66,7 @@ function loadComments (article_id) {
     };
 
     useEffect(() => {
-        fetchComments();
+        loadComments();
 
     }, [article_id]);
 

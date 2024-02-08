@@ -1,36 +1,45 @@
 import ArticleList from '../components/ArticleList';
+import TopicSelector from '../components/TopicSelector';
+import SortBySelector from '../components/SortBySelector';
 import { getArticles } from '../api';
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 export default function HomePage() {
 
-    const location = useLocation();
-    const { articles, isLoading, error } = loadArticles(location);
+    const { articles, isLoading, error } = useLoadArticles();
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {`${error.code} ${error.message}`}</div>;
-    if (articles.length === 0 || articles === undefined) return <div>No articles found</div>;
+    if (articles.length === 0 || !articles) return <div>No articles found</div>;
 
     return (
         <>
-        <ArticleList articles={articles} />
+            <TopicSelector />
+            <SortBySelector />
+            <ArticleList articles={articles} />
         </>
     )
 }
 
-function loadArticles(location) {
+// Custom Hook.
+function useLoadArticles() {
     const [articles, setArticles] = useState([]);
     const [isLoading, setLoading] = useState(true);
-    const [error, setError] = useState();
+    const [error, setError] = useState(null);
+
+    const [ searchParams ] = useSearchParams();
+    const topic = searchParams.get('topic');
+    const sort_by = searchParams.get('sort_by');
+    const order = searchParams.get('order');
 
     useEffect(() => {
         const loadArticles = async () => {
+            setLoading(true);
             try {
-                const searchParams = new URLSearchParams(location.search);
-                const topic = searchParams.get('topic');
-                const articles = await getArticles(topic);
-                setArticles(articles);
+                const loadedArticles = await getArticles(topic, sort_by, order);
+                setArticles(loadedArticles);
+                setError(null);
             } catch(err) {
                 setError(err)
             } finally {
@@ -39,7 +48,7 @@ function loadArticles(location) {
         }
 
         loadArticles();
-    }, [location])
+    }, [topic, sort_by, order])
 
     return { articles, isLoading, error }
 }
