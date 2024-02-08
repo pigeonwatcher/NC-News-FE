@@ -5,7 +5,7 @@ export default function VoteManager({ article }) {
 
     const { votes, handleVote, isLoading, error } = updateVote(article);
 
-    if (error) return <div>Error: {error.msg}</div>;
+    if (error) return <div>Error: {`${error.code} ${error.message}`}</div>;
 
     return (
         <div className="article-votes">

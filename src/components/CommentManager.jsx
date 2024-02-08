@@ -2,30 +2,29 @@ import CommentList from './CommentList';
 import CommentInputBox from './CommentInputBox';
 import { getComments, deleteComment } from '../api';
 import { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../contexts/LoggedInUser';
 
 export default function CommentManager({ article_id }) {
 
-    const { comments, fetchComments:refreshComments, isLoading, error } = fetchComments(article_id);
-    const removeComment = createCommentRemover(refreshComments);
+    const { comments, setComments, isLoading, error } = loadComments(article_id);
+    const handleRemoveComment = createRemoveCommentHandler(setComments);
 
-    const loadComments = () => {
-        if (isLoading) return <div>Loading...</div>;
-        if (error) return <div>Error: {error.msg}</div>;
-        if (comments.length === 0 || comments === undefined) return <div>No Comments</div>; 
+    const renderComments = () => {
+        if (isLoading) return <div className='comment-list'>Loading...</div>;
+        if (error) return <div className='comment-list'>Error: {error.message}</div>;
+        if (comments.length === 0 || comments === undefined) return <div className='comment-list'>No Comments</div>; 
 
-        return <CommentList comments={comments} removeComment={removeComment} />
+        return <CommentList comments={comments} handleRemoveComment={handleRemoveComment} />
     }
 
     return (
         <>
-            <CommentInputBox refreshComments={refreshComments} article_id={article_id}/>
-            {loadComments()}
+            <CommentInputBox setComments={setComments} article_id={article_id}/>
+            {renderComments()}
         </>
     )
 }
 
-function fetchComments (article_id) {
+function loadComments (article_id) {
     const [comments, setComments] = useState();
     const [isLoading, setLoading] = useState(true); 
     const [error, setError] = useState(); 
@@ -47,25 +46,27 @@ function fetchComments (article_id) {
 
     }, [article_id]);
 
-    return { comments, fetchComments, isLoading, error };
+    return { comments, setComments, isLoading, error };
 };
 
-function createCommentRemover(refreshComments) {
+function createRemoveCommentHandler(setComments) {
 
-    const removeComment = () => {
+    const handleRemoveComment = () => {
         const [isLoading, setLoading] = useState(false); 
         const [error, setError] = useState(); 
 
-        const removeComment = async (user, comment) => {
-            if(user === comment.author) {
+        const removeComment = async (user, commentToDelete) => {
+            if(user === commentToDelete.author) {
                 try {
                     setLoading(true);
-                    await deleteComment(comment.comment_id);
+                    await deleteComment(commentToDelete.comment_id);
+                    setComments((comments) => {
+                        return comments.filter((comment) => comment.comment_id !== commentToDelete.comment_id);
+                    })
                 } catch(err) {
                     setError(err);
                 } finally {
                     setLoading(false);
-                    refreshComments();
                 }
             }
         }
@@ -73,5 +74,5 @@ function createCommentRemover(refreshComments) {
         return { removeComment, isLoading, error }
     }
 
-    return removeComment
+    return handleRemoveComment
 }

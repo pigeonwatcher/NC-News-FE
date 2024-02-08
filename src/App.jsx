@@ -5,13 +5,12 @@ import './App.css'
 
 function App() {
 
-  const [topic, setTopic] = useState(null);
   const [sortBy, setSortBy] = useState(null);
 
   return (
     <>
       <nav>
-        <Nav setTopic={setTopic} setSortBy={setSortBy}/>
+        <Nav />
       </nav>
       <main>
         <Routers />
