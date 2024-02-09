@@ -15,11 +15,11 @@ export default function HomePage() {
     if (articles.length === 0 || !articles) return <div>No articles found</div>;
 
     return (
-        <>
+        <div className='home-page'>
             <TopicSelector />
             <SortBySelector />
             <ArticleList articles={articles} />
-        </>
+        </div>
     )
 }
 
