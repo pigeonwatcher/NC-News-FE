@@ -1,6 +1,6 @@
 # Northcoders News App
 
-A JavaScript front-end app which aims to mimic a real-world backend service (e.g. Reddit).
+A JavaScript front-end app which aims to mimic a social news aggregation, web content rating and discussion website (e.g. Reddit).
 
 Website: https://nc-news-fe.vercel.app/
 
