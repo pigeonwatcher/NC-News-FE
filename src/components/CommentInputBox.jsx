@@ -7,7 +7,7 @@ export default function CommentInputBox({ setComments, article_id }) {
 
     const { user } = useContext(UserContext);
     const [ commentBody, setComment ] = useState('');
-    const [ isValid, setIsValid ] = useState()
+    const [ isValid, setIsValid ] = useState(true)
     const { sendComment, isLoading, error } = useSendComment(setComments, article_id);
 
     const handleSubmit = (event) => {
@@ -27,7 +27,7 @@ export default function CommentInputBox({ setComments, article_id }) {
     return (
         <form className='comment-input-box' onSubmit={handleSubmit}>
             <label htmlFor='inputbox'>Comment </label>
-            <input id='inputbox' value={commentBody} onChange={(event) => setComment(event.target.value)}></input>
+            <textarea id='inputbox' value={commentBody} onChange={(event) => setComment(event.target.value)}></textarea>
             {isLoading ? <div className='comment-input-box'>Posting Comment...</div> : <button>Submit</button>}
             {!isValid ? <p>Invalid Format: Empty</p> : null}
         </form>
