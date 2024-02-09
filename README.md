@@ -11,10 +11,10 @@ https://github.com/pigeonwatcher/NC-News-BE
 ## Setup (Run Locally)
 
 1. Install Node.js:
-* [Node.js](https://nodejs.org/)(v21.2.0)
+    * [Node.js](https://nodejs.org/)(v21.2.0)
 
 2. Clone this repo:
-* `git clone https://github.com/pigeonwatcher/NC-News-FE.git`
+    * `git clone https://github.com/pigeonwatcher/NC-News-FE.git`
 
 3. Finally, run `npm run dev` to host the server locally. 
 
