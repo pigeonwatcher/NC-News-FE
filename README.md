@@ -16,7 +16,9 @@ https://github.com/pigeonwatcher/NC-News-BE
 2. Clone this repo:
     * `git clone https://github.com/pigeonwatcher/NC-News-FE.git`
 
-3. Finally, run `npm run dev` to host the server locally. 
+3. Run `npm install` to install dependencies.
+
+4. Finally, run `npm run dev` to host the server locally. 
 
 ## Special Thanks
 
